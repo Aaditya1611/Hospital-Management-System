@@ -1,0 +1,66 @@
+server:
+  port: 8765
+
+spring:
+  application:
+    name: api-gateway
+    
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          
+      routes:
+        - id: Authentication-Service
+          uri: lb://auth
+          predicates:
+            - Path=/hospitalManagementSystem/auth/**
+          filters:
+            - StripPrefix=2
+
+        - id: AI-Chatbot
+          uri: lb://chatbot
+          predicates:
+            - Path=/hospitalManagementSystem/chatbot/**
+          filters:
+            - AuthenticationFilter
+            - StripPrefix=2
+        
+        - id: Doctors-Helpdesk
+          uri: lb://helpdesk
+          predicates:
+            - Path=/hospitalManagementSystem/helpdesk/**
+          filters:
+            - AuthenticationFilter
+            - StripPrefix=2
+
+        - id: Covid19-Database-Connection
+          uri: lb://coviddata
+          predicates:
+          - Path=/hospitalManagementSystem/covidData/**
+          filters:
+          # - AuthenticationFilter
+          - StripPrefix=2
+            
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

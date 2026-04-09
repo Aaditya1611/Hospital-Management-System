@@ -1,0 +1,21 @@
+spring:
+    security:
+        oauth2:
+            client:
+#                provider:
+#                    oauth2-authorization.issuer-uri: http://localhost:8443/realms/Auth_api
+#                registration:
+#                    oauth2-authorization.client-id: oauth2-authorization
+#                    oauth2-authorization.authorization-grant-type: authorization_code
+#                    oauth2-authorization.redirect-uri: http://localhost:8080/login/oauth2/code/oauth2-authorization2
+#                    oauth2-authorization.scope: openid,profile,roles,email
+#                    oauth2-authorization.client-secret: 8AqKhksg1jFUDAId76iMPSXgTKLnGLDt
+                registration:
+                    google:
+                        client-id: ${GOOGLE_ID}
+                        client-secret: ${GOOGLE_SECRET}
+                    github:
+                        client-id: ${GITHUB_ID}
+                        client-secret: ${GITHUB_SECRET}
+
+        
