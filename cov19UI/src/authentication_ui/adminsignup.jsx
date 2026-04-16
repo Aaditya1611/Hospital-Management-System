@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { Pointer } from 'lucide-react';
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { SignupBasic } from "../modules/AuthService";
+import { SignupAdminBasic } from "../modules/AuthService";
 import loginBg from "../assets/login_page_bg.png";
 
-const Signup = () => {
+const AdminSignup = () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,6 +13,7 @@ const Signup = () => {
         email: '',
         username: '',
         password: '',
+        employeeId: ''
     })
 
     const handleChange = (e) => {
@@ -23,7 +24,7 @@ const Signup = () => {
         }))
     }
 
-    const handleSignup = async (e) => {
+    const handleAdminSignup = async (e) => {
 
         e.preventDefault();
         if (formData.email.trim() === "" || formData.username.trim() === "" || formData.password.trim() === "") {
@@ -33,7 +34,7 @@ const Signup = () => {
             alert("Please enter a valid email")
             return;
         }
-        const response = await SignupBasic(formData);
+        const response = await SignupAdminBasic(formData);
         if (response.success) {
             const data = response.data;
             alert("Signup successful")
@@ -84,13 +85,20 @@ const Signup = () => {
                             value={formData.password}
                             onChange={handleChange}
                         />
+                        <input
+                            className="w-[25rem] h-[3rem] rounded-full border-none focus:outline-none bg-blue-100 text-gray-600 p-5 focus-within:bg-blue-50 duration-300"
+                            type="text"
+                            id="employeeId"
+                            placeholder="Enter your EmployeeId"
+                            value={formData.employeeId}
+                            onChange={handleChange}
+                        />
                         <button
-                            onClick={handleSignup}
+                            onClick={handleAdminSignup}
                             className="w-[25rem] h-[3rem] rounded-full border-none bg-linear-to-r from-blue-200 to-blue-400 text-lg text-gray-600 hover:text-white duration-400 cursor-pointer flex flex-row items-center justify-center gap-x-2">
                             Sign Up
                             <ArrowRight className="text-gray-600" size={20} />
                         </button>
-                        <Link to={"/adminsignup"} className="text-gray-800 text-lg underline mt-2">Sign Up as admin?</Link>
                     </form>
                     <div>
                     </div>
@@ -100,4 +108,4 @@ const Signup = () => {
     )
 }
 
-export default Signup;
+export default AdminSignup;

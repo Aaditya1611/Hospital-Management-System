@@ -4,7 +4,7 @@ import sideImg1 from "../assets/side_image2.png";
 import sideImg4 from "../assets/side_image4.png";
 import sideImg3 from "../assets/side_image3.png";
 import { motion } from "framer-motion";
-import Experties from "../data/expertiesSection";
+import Experties from "../staticdata/expertiesSection";
 import { Notebook } from "lucide-react";
 import { UserLock } from "lucide-react";
 import Footer from "../components/footer";

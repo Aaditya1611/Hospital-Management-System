@@ -32,12 +32,13 @@ const Login = () => {
         if (response.success) {
             alert("login successful")
             const data = response.data;
+            console.log("login data", data)
             localStorage.setItem("token", data?.token)
             setFormData({
                 username: "",
                 password: ""
             })
-            navigate("/homepage")
+            navigate("/covid")
         } else {
             alert("login failed", response.status)
             console.warn("Login failed with status", response.status);
