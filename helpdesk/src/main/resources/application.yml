@@ -1,0 +1,35 @@
+# covid-data-service:
+#     build: ./covid-data-service
+#     container_name: covid-data-service
+#     ports:
+#       - "8082:8082"
+#     depends_on:
+#       - eureka-server
+#       - covid-db # Make sure this matches the DB container name!
+#     networks:
+#       - orbit-net
+spring:
+    application:
+        name: helpdesk
+    datasource: 
+        url: jdbc:postgresql://postgres-db:5432/helpdesk_db
+        username: postgres
+        hikari:
+            auto-commit: true
+        driver-class-name: org.postgresql.Driver
+    
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        show-sql: true
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+    instance:
+        hostname: helpdesk-service
+        prefer-ip-address: true
+    client:
+        service-url:
+            defaultZone: http://eureka-server:8761/eureka/
