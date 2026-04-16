@@ -1,13 +1,3 @@
-# covid-data-service:
-#     build: ./covid-data-service
-#     container_name: covid-data-service
-#     ports:
-#       - "8082:8082"
-#     depends_on:
-#       - eureka-server
-#       - covid-db # Make sure this matches the DB container name!
-#     networks:
-#       - orbit-net
 spring:
     application:
         name: helpdesk
