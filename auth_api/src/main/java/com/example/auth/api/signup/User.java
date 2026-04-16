@@ -44,6 +44,7 @@ public class User {
     private String email;
     private String password;    
     private String providerId;
+    private String employeeId;
 
     @Enumerated(EnumType.STRING)
     private AuthProviderType providerType;

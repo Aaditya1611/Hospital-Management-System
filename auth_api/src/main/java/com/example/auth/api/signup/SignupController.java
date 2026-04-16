@@ -30,7 +30,19 @@ public class SignupController {
             e.printStackTrace();
             return ResponseEntity.status(404).body("Registration failed");
         }
-
     }
+
+    @PostMapping("/signupAdmin")
+    public ResponseEntity<?> registerAdmin(@RequestBody User user) {
+
+        try {
+            saveSecureUserData.saveAdmin(user);
+            return ResponseEntity.ok().body("Admin registered successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(404).body("Registration failed");
+        }
+    }
+    
 
 }

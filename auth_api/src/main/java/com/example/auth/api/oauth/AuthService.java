@@ -1,15 +1,19 @@
 package com.example.auth.api.oauth;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.example.auth.api.dto.LoginResponseDTO;
 import com.example.auth.api.dto.SignupRequestDTO;
 import com.example.auth.api.jwt.JwtService;
+import com.example.auth.api.login.UserDetailsImplementation;
 import com.example.auth.api.signup.Patient;
 import com.example.auth.api.signup.PatientRepo;
 import com.example.auth.api.signup.User;
@@ -46,12 +50,12 @@ public class AuthService {
         user = userRepo.save(user);
 
         Patient patient = Patient.builder()
-            .name(signupRequestDTO.getUsername())
-            .email(signupRequestDTO.getEmail())
-            .user(user)
-            .build();
+                .name(signupRequestDTO.getUsername())
+                .email(signupRequestDTO.getEmail())
+                .user(user)
+                .build();
         patientRepo.save(patient);
-        
+
         return user;
     }
 
@@ -68,6 +72,8 @@ public class AuthService {
 
         User emailUser = userRepo.findByEmail(email);
 
+        UserDetailsImplementation userDetails = new UserDetailsImplementation(user);
+
         // signup user if it doesnt exist
         if (user == null && emailUser == null) {
             user = signupInternal(new SignupRequestDTO(name, null, email), providerType, providerId);
@@ -81,7 +87,7 @@ public class AuthService {
             throw new BadCredentialsException("This email is already registered with provider" + email);
         }
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO(user.getId(),
-                jwtService.generateToken(user.getUsername()));
+                jwtService.generateToken(user.getUsername(), userDetails.getAuthorities()));
         return ResponseEntity.ok(loginResponseDTO);
     }
 

@@ -7,5 +7,6 @@ public enum AuthProviderType {
     FACEBOOK,
     TWITTER,
     LINKEDIN,
-    BASIC
+    BASIC,
+    EMPLOYEE_SIGNUP
 }

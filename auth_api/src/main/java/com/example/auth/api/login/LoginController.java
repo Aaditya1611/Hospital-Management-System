@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.auth.api.jwt.JwtService;
 import com.example.auth.api.signup.User;
-import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api")
 public class LoginController {
-    
+
     private final AuthenticationManager authenticationManager;
-    
+
     public LoginController(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
@@ -31,23 +31,23 @@ public class LoginController {
     @Autowired
     public JwtService jwtService;
 
-  
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
 
         try {
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        
-                UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-                Map<String, Object> response = new HashMap<>();
-                response.put("generated token", jwtService.generateToken(user.getUsername()));
+            UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
 
-                return ResponseEntity.ok("login successfull" + response);
-            } catch (BadCredentialsException e) {
-                System.out.println("invalid username or password");
-                return ResponseEntity.status(401).body("invalid username or password");
-            }
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", jwtService.generateToken(user.getUsername(), authentication.getAuthorities()));
+            response.put( "user", userDetails.getUsername());
+
+            return ResponseEntity.ok(response);
+        } catch (BadCredentialsException e) {
+            System.out.println("invalid username or password");
+            return ResponseEntity.status(401).body("invalid username or password");
+        }
     }
 }
