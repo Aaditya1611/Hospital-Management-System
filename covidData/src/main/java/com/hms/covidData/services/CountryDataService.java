@@ -106,7 +106,7 @@ public class CountryDataService {
     }
 
     @Transactional
-    public void deleteById(Integer id) {
-        countryDataRepo.deleteById(id);
+    public void deleteByCountry(String name) {
+        countryDataRepo.deleteByCountryName(name);
     }
 }

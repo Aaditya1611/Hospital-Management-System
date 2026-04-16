@@ -2,7 +2,8 @@ spring:
     application:
         name: coviddata 
     datasource: 
-        url: jdbc:postgresql://localhost:5432/cov19
+        url: jdbc:postgresql://postgres-db:5432/covid_db
+        #url : jdbc:postgresql://localhost:5432/cov19
         username: postgres
         hikari:
             auto-commit: true
@@ -19,7 +20,12 @@ spring:
 
 eureka:
   instance:
+    hostname: covid-data-service
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+        #defaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8081

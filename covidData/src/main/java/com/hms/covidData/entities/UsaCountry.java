@@ -46,6 +46,9 @@ public class UsaCountry {
     @Column (name = "latitude")
     private BigDecimal latitude;
 
+    @Column (name = "longitude")
+    private BigDecimal longitude;
+
     @Column (name = "combined_key")
     private String combinedKey;
 
