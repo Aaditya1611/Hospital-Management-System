@@ -1,0 +1,110 @@
+services:
+  eureka-server:
+    build: ./service-registery
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - orbit-net
+
+  api-gateway:
+    build: 
+      context: ./api-gateway 
+      args:
+        - JAVA_VERSION=21
+    container_name: api-gateway
+    ports:
+      - "8765:8765"
+    depends_on:
+      - eureka-server
+    networks:
+      - orbit-net
+
+  auth-service:
+    build: ./auth_api
+    container_name: auth-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://hms-postgres:5432/auth_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - postgres-db
+    networks:
+      - orbit-net
+
+  chatbot-service:
+    build: ./chatbot
+    container_name: chatbot-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://hms-postgres:5432/chatbot_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    ports:
+      - "8082:8082" 
+    depends_on:
+      - eureka-server
+      - postgres-db
+    networks:
+      - orbit-net
+
+  covid-data-service:
+    build: ./covidData
+    container_name: covid-data-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://hms-postgres:5432/covid_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+      - postgres-db
+    networks:
+      - orbit-net
+
+  helpdesk-service:
+    build: ./helpdesk
+    container_name: helpdesk-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://hms-postgres:5432/helpdesk_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    ports: 
+      - "8084:8084"
+    depends_on:
+      - eureka-server
+      - postgres-db
+    networks:
+      - orbit-net
+
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: hms-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init-db/init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - orbit-net
+
+  hospital-frontend:
+    build: ./cov19UI
+    container_name: hospital-frontend
+    ports:
+      - "5173:80"
+    environment:
+      - VITE_API_URL=http://localhost:8765/
+    depends_on:
+      - api-gateway
+    networks:
+      - orbit-net
+
+networks:
+  orbit-net:
+    driver: bridge
