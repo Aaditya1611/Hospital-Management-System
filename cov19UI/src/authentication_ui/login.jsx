@@ -34,11 +34,12 @@ const Login = () => {
             const data = response.data;
             console.log("login data", data)
             localStorage.setItem("token", data?.token)
+            localStorage.setItem("user", data?.username)
             setFormData({
                 username: "",
                 password: ""
             })
-            navigate("/covid")
+            navigate("/")
         } else {
             alert("login failed", response.status)
             console.warn("Login failed with status", response.status);
